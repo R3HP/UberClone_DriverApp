@@ -1,0 +1,7 @@
+
+import 'package:taxi_line_driver/features/cabing/data/model/address.dart';
+
+abstract class GeoCodingRepository {
+  Future<Address> latLngToAddress(double latitude,double longitude);
+  Future<List<Address>> addressToLatLng(String address);
+}
