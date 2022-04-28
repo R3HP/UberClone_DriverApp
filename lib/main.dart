@@ -73,11 +73,11 @@ class _MyAppState extends State<MyApp> {
     ProviderScope.containerOf(context).dispose();
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'TaxiLine Driver',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

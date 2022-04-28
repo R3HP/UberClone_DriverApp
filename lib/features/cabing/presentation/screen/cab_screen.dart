@@ -86,13 +86,13 @@ class _CabScreenState extends ConsumerState<CabScreen> {
               return const SizedBox(
                 width: double.infinity,
                 height: double.infinity,
-                child: CircularProgressIndicator.adaptive(),
+                child: Center(child: CircularProgressIndicator.adaptive()),
               );
             }
           }),
     );
   }
-  
+
   void rebuildOnUserLocationChange(event) {
     if (currentLocationData != null) {
       if (currentLocationData!.latitude != event.latitude &&

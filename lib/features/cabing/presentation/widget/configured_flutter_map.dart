@@ -46,7 +46,7 @@ class ConfiguredFlutterMap extends StatelessWidget {
                 options: MarkerLayerOptions(markers: [
                   Marker(
                       point: startPosition,
-                      builder: (context) => const Icon(Icons.car_rental)),
+                      builder: (context) => Image.asset('assets/images/car_android.png',)),
                   if (snapshot.hasData)
                     ...snapshot.data
                             ?.map((trip) => Marker(

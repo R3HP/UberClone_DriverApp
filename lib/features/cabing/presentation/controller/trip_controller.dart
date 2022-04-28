@@ -35,16 +35,15 @@ class TripController with ChangeNotifier {
     final tripsListStream = _getTripRequestsUseCase();
     tripsListStream.listen((tripsList) {
       _trips = tripsList;
-      _trips = sortTripsBasedRange(_trips,currentLocation);
+      _trips = sortTripsBasedRange(_trips, currentLocation);
     });
   }
 
   Stream<List<Trip>> getTripStream(LatLng currentLocation) {
     final tripsStream = _getTripRequestsUseCase();
 
-    final tripsOrderedStream = tripsStream.map((event) {
-      return sortTripsBasedRange(event, currentLocation);
-    });
+    final tripsOrderedStream =
+        tripsStream.map((event) => sortTripsBasedRange(event, currentLocation));
     return tripsOrderedStream;
   }
 
@@ -60,8 +59,17 @@ class TripController with ChangeNotifier {
     return response;
   }
 
-  List<Trip> sortTripsBasedRange(List<Trip> trips,LatLng currentLocation) {
-    final orderedTrips = sortTripsBasedRange(trips, currentLocation);
+  List<Trip> sortTripsBasedRange(List<Trip> trips, LatLng currentLocation) {
+    final orderedTrips = trips..sort((a, b) {
+        final fisrtTripDistanceToCurrentLocation = const Distance().call(
+            LatLng(a.wayPoints.first.latitude, a.wayPoints.first.longitude),
+            currentLocation);
+        final secondTripDistanceToCurrentLocation = const Distance().call(
+            LatLng(b.wayPoints.first.latitude, b.wayPoints.first.longitude),
+            currentLocation);
+        return fisrtTripDistanceToCurrentLocation
+            .compareTo(secondTripDistanceToCurrentLocation);
+      });
     return orderedTrips;
   }
 }

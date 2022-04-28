@@ -50,11 +50,12 @@ class _TripRequestListState extends State<TripRequestList> {
               );
             } else {
               if (snapshot.hasError) {
+                print(snapshot.error);
                 return Center(
                   child: Text(snapshot.error.toString()),
                 );
               } else {
-                if (snapshot.data!.isEmpty) {
+                if (snapshot.data!.isNotEmpty) {
                   return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (ctx, index) =>
