@@ -1,3 +1,4 @@
+import 'package:taxi_line_driver/features/accounting/data/model/driver_model.dart';
 import 'package:taxi_line_driver/features/accounting/domain/repository/driver_repositor.dart';
 
 class LoginDriverUseCase {
@@ -7,13 +8,12 @@ class LoginDriverUseCase {
     required this.driverRepository,
   });
 
-  call(String email, String password) async {
+  Future<DriverModel> call(String email, String password) async {
     try {
-      final user =
-          await driverRepository.loginUserWithEmailAndPassword(email, password);  
+        final driver = await driverRepository.loginUserWithEmailAndPassword(email, password);  
+        return driver;
     } catch (error) {
-      print(error);
-      throw UnimplementedError();
+      rethrow;
     }
   }
 }

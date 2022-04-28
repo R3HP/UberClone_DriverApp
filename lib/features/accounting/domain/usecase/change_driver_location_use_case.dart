@@ -8,6 +8,11 @@ class ChangeDriverLocationUseCase {
   });
 
   Future<void> call(double latitude,double longitude) async {
-    return await driverRepository.changeDriverLocationInDB(latitude, longitude);
+    try {
+    final response =await driverRepository.changeDriverLocationInDB(latitude, longitude);
+    return response;
+    } catch (error) {
+      rethrow;
+    }
   }
 }

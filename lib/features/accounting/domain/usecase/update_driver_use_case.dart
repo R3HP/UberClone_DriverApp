@@ -7,9 +7,12 @@ class UpdateDriverUseCase {
     required this.driverRepository,
   });
 
-  call(Map<String,dynamic> updateMap) async {
-    final response = await driverRepository.updateDriver(updateMap);
-    return ;
+  Future<void> call(Map<String, dynamic> updateMap) async {
+    try {
+      final response = await driverRepository.updateDriver(updateMap);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
   }
-
 }

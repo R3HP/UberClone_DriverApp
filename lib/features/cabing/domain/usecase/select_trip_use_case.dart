@@ -8,13 +8,13 @@ class SelectTripUseCase {
     required this.tripRepository,
   });
 
-  call(Trip trip) async {
+  Future<void> call(Trip trip) async {
     try {
       await tripRepository.selectTrip(trip);
       await tripRepository.deleteTripRequest(trip);
       return ;
     } catch (error) {
-      throw UnimplementedError();
+      rethrow;
     }
   }
 }

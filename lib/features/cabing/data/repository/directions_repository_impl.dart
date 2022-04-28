@@ -1,4 +1,5 @@
 import 'package:latlong2/latlong.dart';
+import 'package:taxi_line_driver/core/error.dart';
 import 'package:taxi_line_driver/features/cabing/data/datasource/directions_data_source.dart';
 import 'package:taxi_line_driver/features/cabing/data/model/direction.dart';
 import 'package:taxi_line_driver/features/cabing/domain/repository/directions_repository.dart';
@@ -16,8 +17,8 @@ class DirectionsRepositoryImpl implements DirectionsRepository {
     try {
       final direction = await directionDataSource.getDirectionWithPoints(points);
       return direction;
-    } catch (error) {
-      throw UnimplementedError();
+    }catch (exception){
+      throw Error(message: exception.toString());
     }
   }
 

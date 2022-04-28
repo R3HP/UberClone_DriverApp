@@ -16,7 +16,6 @@ class GpsIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  print('gps Icon Build');
   final Size size = MediaQuery.of(context).size;
     return Positioned(
       bottom: shouldGoUp == false
@@ -30,8 +29,7 @@ class GpsIcon extends StatelessWidget {
             side: BorderSide(width: 1, color: Colors.transparent)),
         child: IconButton(
           onPressed: () {
-            final x = mapController.move(userLocation, 18.4,id: 'gps');
-            print('x : $x');
+            mapController.move(userLocation, 18.4,id: 'gps');
           },
           icon: const Icon(
             Icons.gps_fixed_sharp,

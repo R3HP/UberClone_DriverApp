@@ -15,7 +15,7 @@ class GetDirectionsUseCase {
       final direction = await directionRepository.getDirectionWithPoints(points);
       return direction;
     } catch (error) {
-      throw UnimplementedError();
+      rethrow;
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:taxi_line_driver/core/constants.dart';
 import 'package:taxi_line_driver/features/cabing/data/model/trip.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -21,8 +22,7 @@ class DialogMap extends StatelessWidget {
           zoom: 18.4,
           onMapCreated: (controller) {
             controller.onReady.then((value) {
-              final centerZoom =
-                  controller.centerZoomFitBounds(LatLngBounds(
+              final centerZoom = controller.centerZoomFitBounds(LatLngBounds(
                 LatLng(
                   trip.wayPoints.first.latitude,
                   trip.wayPoints.first.longitude,
@@ -41,10 +41,9 @@ class DialogMap extends StatelessWidget {
           TileLayerWidget(
             options: TileLayerOptions(
                 urlTemplate:
-                    'https://api.mapbox.com/styles/v1/r3zahp/cl04yaeqh000a15l2i8zdxib7/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoicjN6YWhwIiwiYSI6ImNrYnhmc2JhbzA1bTAyc3Fubm5paHZqd2sifQ.kiQxWPBep95bN00r41U7Rg',
+                    'https://api.mapbox.com/styles/v1/r3zahp/cl04yaeqh000a15l2i8zdxib7/tiles/256/{z}/{x}/{y}@2x?access_token=$Your_Primary_Key',
                 additionalOptions: {
-                  'accessToken':
-                      'pk.eyJ1IjoicjN6YWhwIiwiYSI6ImNrYnhmc2JhbzA1bTAyc3Fubm5paHZqd2sifQ.kiQxWPBep95bN00r41U7Rg',
+                  'accessToken': Your_Primary_Key,
                   'id': 'mapbox.mapbox-streets-v8'
                 }),
           ),
@@ -78,9 +77,9 @@ class DialogMap extends StatelessWidget {
                 points: trip.route.geometryCordinates,
                 color: Colors.green,
                 strokeWidth: 2,
-              )
+              ),
             ]),
-          )
+          ),
         ]);
   }
 }

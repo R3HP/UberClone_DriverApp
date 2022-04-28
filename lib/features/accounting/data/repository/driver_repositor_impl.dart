@@ -1,3 +1,4 @@
+import 'package:taxi_line_driver/core/error.dart';
 import 'package:taxi_line_driver/features/accounting/data/datasource/driver_data_source.dart';
 import 'package:taxi_line_driver/features/accounting/data/model/driver_model.dart';
 import 'package:taxi_line_driver/features/accounting/domain/repository/driver_repositor.dart';
@@ -14,8 +15,8 @@ class DriverRepositoryImpl implements DriverRepository {
     try{
       final driver = await driverDataSource.loginWithEmailAndPassword(email, password);
       return driver;
-    }catch (error){
-      throw UnimplementedError();
+    }catch (exception){
+      throw Error(message: exception.toString());
     }
   }
 
@@ -24,8 +25,8 @@ class DriverRepositoryImpl implements DriverRepository {
     try{
       final driver = await driverDataSource.createUserWithEmailAndPassword(userName, email, password, carModel, plateNumber);
       return driver;
-    }catch(error){
-      throw UnimplementedError();
+    }catch (exception){
+      throw Error(message: exception.toString());
     }
   }
 
@@ -34,18 +35,18 @@ class DriverRepositoryImpl implements DriverRepository {
     try {
       final driver = await driverDataSource.getDriverWithDriverId(driverId);
       return driver;
-    } catch (error) {
-      throw UnimplementedError();
+    }catch (exception){
+      throw Error(message: exception.toString());
     }
   }
 
   @override
-  Future<void> makeDriverAvailableInDB(DriverModel driver) async {
+  Future<void> toggleDriverAvailablityInDB(DriverModel driver,bool shouldMakeAvailable) async {
     try {
-      final response = await driverDataSource.makeDriverAvailable(driver);
+      await driverDataSource.toggleDriverAvailablity(driver,shouldMakeAvailable);
       return;
-    } catch (error) {
-      throw UnimplementedError();
+    }catch (exception){
+      throw Error(message: exception.toString());
     }
   }
 
@@ -54,8 +55,8 @@ class DriverRepositoryImpl implements DriverRepository {
     try {
       final response = await driverDataSource.changeDriverLocation(latitude, longitude);
       return response;
-    } catch (error) {
-      throw UnimplementedError();
+    }catch (exception){
+      throw Error(message: exception.toString());
     }
   }
 
@@ -64,8 +65,8 @@ class DriverRepositoryImpl implements DriverRepository {
     try {
       final response = await driverDataSource.updateMap(updateMap);
       return response;
-    } catch (error) {
-      throw UnimplementedError();
+    }catch (exception){
+      throw Error(message: exception.toString());
     }
   }
 }

@@ -1,103 +1,142 @@
-// import 'dart:convert';
+import 'package:flutter/material.dart';
+// import 'package:flutter_mapbox_navigation/flutter_mapbox_navigation.dart';
+// import 'package:flutter_mapbox_navigation/library.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_mapbox_navigation/flutter_mapbox_navigation.dart';
 
-// import 'package:flutter/material.dart';
-// import 'package:mapbox_navigation/mapbox_navigation.dart';
+// import 'package:flutter_mapbox_navigation/library.dart';
 
-// class NavigationScreen extends StatefulWidget {
-//   const NavigationScreen({Key? key}) : super(key: key);
+import 'package:taxi_line_driver/features/cabing/data/model/way_point.dart'
+    as myWayPoint;
 
-//   @override
-//   State<NavigationScreen> createState() => _NavigationScreenState();
-// }
+class NavigationScreen extends StatefulWidget {
+  static const routeName = '/navigation_screen';
 
-// class _NavigationScreenState extends State<NavigationScreen> {
-//   MapViewController controller;
-//   var mapBox = MapboxNavigation();
+  const NavigationScreen({
+    Key? key,
+  }) : super(key: key);
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     mapBox.init();
+  @override
+  State<NavigationScreen> createState() => _NavigationScreenState();
+}
 
-//     mapBox.getMapBoxEventResults().onData((data) {
-//       print("Event: ${data.eventName}, Data: ${data.data}");
+class _NavigationScreenState extends State<NavigationScreen> {
+  List<myWayPoint.WayPoint> waypoints = [];
+  late MapBoxNavigation directions;
+  MapBoxOptions options = MapBoxOptions(
+      zoom: 18.0,
+      animateBuildRoute: true,
+      voiceInstructionsEnabled: true,
+      bannerInstructionsEnabled: true,
+      mode: MapBoxNavigationMode.drivingWithTraffic,
+      isOptimized: true,
+      units: VoiceUnits.metric,
+      simulateRoute: true,
+      language: 'en');
+  late MapBoxNavigationViewController _controller;
 
-//       var event = MapBoxEventProvider.getEventType(data.eventName);
+  late WayPoint sourceWaypoint;
+  late WayPoint destinationWaypoint;
 
-//       if (event == MapBoxEvent.route_building) {
-//         print('route Building');
-//       } else if (event == MapBoxEvent.route_build_failed) {
-//         print('Route Build Failed');
-//       } else if (event == MapBoxEvent.route_built) {
-//         var routeResponse = MapBoxRouteResponse.fromJson(jsonDecode(data.data));
+  late double remainingDistance;
+  late double remainingDuration;
 
-//         controller
-//             .getFormattedDistance(routeResponse.routes.first.distance)
-//             .then((value) => print("Route Distance: $value"));
+  String instruction = '';
+  bool arrived = false;
+  bool routeBuilt = false;
+  bool isNavigating = false;
+  bool isMultipleStop = true;
+  bool _isFirst = true;
 
-//         controller
-//             .getFormattedDuration(routeResponse.routes.first.duration)
-//             .then((value) => print("Route Duration: $value"));
-//       } else if (event == MapBoxEvent.progress_change) {
-//         var progressEvent = MapBoxProgressEvent.fromJson(jsonDecode(data.data));
+  final navigationWayPoints = <WayPoint>[];
 
-//         controller
-//             .getFormattedDistance(progressEvent.legDistanceRemaining)
-//             .then((value) => print("Leg Distance Remaining: $value"));
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isFirst) {
+      waypoints = ModalRoute.of(context)?.settings.arguments
+          as List<myWayPoint.WayPoint>;
+      for (var waypoint in waypoints) {
+        navigationWayPoints.add(WayPoint(
+            name: waypoint.name,
+            longitude: waypoint.longitude,
+            latitude: waypoint.latitude));
+      }
 
-//         controller
-//             .getFormattedDistance(progressEvent.distanceTraveled)
-//             .then((value) => print("Distance Travelled: $value"));
+      _isFirst = false;
+    }
+  }
 
-//         controller
-//             .getFormattedDuration(progressEvent.legDurationRemaining)
-//             .then((value) => print("Leg Duration Remaining: $value"));
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Expanded(
+          child: MapBoxNavigationView(
+        options: options,
+        onRouteEvent: _onEmbeddedRouteEvent,
+        onCreated: (controller) {
+          _controller = controller;
 
-//         print("Voice Instruction: ${progressEvent.voiceInstruction},"
-//             "Banner Instruction: ${progressEvent.bannerInstruction}");
-//       } else if (event == MapBoxEvent.milestone_event) {
-//         var mileStoneEvent =
-//             MapBoxMileStoneEvent.fromJson(jsonDecode(data.data));
+          controller.initialize();
+          controller.buildRoute(wayPoints: navigationWayPoints);
+          controller.startNavigation();
+        },
+      )),
+      Consumer(
+        builder: (ctx, ref, child) => ElevatedButton(
+            onPressed: () {
+              // ref.read(tripControllerProvider).finishPendingTrip();
+              Navigator.of(context).pop();
+            },
+            child: const Text('Start another ride')),
+      )
+    ]));
+  }
 
-//         controller
-//             .getFormattedDistance(mileStoneEvent.distanceTraveled)
-//             .then((value) => print("Distance Travelled: $value"));
-//       } else if (event == MapBoxEvent.speech_announcement) {
-//         var speechEvent = MapBoxEventData.fromJson(jsonDecode(data.data));
-//         print("Speech Text: ${speechEvent.data}");
-//       } else if (event == MapBoxEvent.banner_instruction) {
-//         var bannerEvent = MapBoxEventData.fromJson(jsonDecode(data.data));
-//         print("Banner Text: ${bannerEvent.data}");
-//       } else if (event == MapBoxEvent.navigation_cancelled) {
-//       } else if (event == MapBoxEvent.navigation_finished) {
-//       } else if (event == MapBoxEvent.on_arrival) {
-//       } else if (event == MapBoxEvent.user_off_route) {
-//         var locationData = MapBoxLocation.fromJson(jsonDecode(data.data));
-//         print("User has off-routed: Location: ${locationData.toString()}");
-//       } else if (event == MapBoxEvent.faster_route_found) {
-//         var routeResponse = MapBoxRouteResponse.fromJson(jsonDecode(data.data));
+  Future<void> _onEmbeddedRouteEvent(e) async {
+    remainingDistance = (await directions.distanceRemaining)!;
+    remainingDuration = (await directions.durationRemaining)!;
 
-//         controller
-//             .getFormattedDistance(routeResponse.routes.first.distance)
-//             .then(
-//                 (value) => print("Faster route found: Route Distance: $value"));
-
-//         controller
-//             .getFormattedDuration(routeResponse.routes.first.duration)
-//             .then(
-//                 (value) => print("Faster route found: Route Duration: $value"));
-//       }
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: MapBoxMapView(
-//         onMapViewCreated: (controller) {
-//           controller.startNavigation()
-//         },
-//       ),
-//     );
-//   }
-// }
+    switch (e.eventType) {
+      case MapBoxEvent.progress_change:
+        var progressEvent = e.data as RouteProgressEvent;
+        if (progressEvent.currentStepInstruction != null) {
+          instruction = progressEvent.currentStepInstruction!;
+        }
+        break;
+      case MapBoxEvent.route_building:
+      case MapBoxEvent.route_built:
+        setState(() {
+          routeBuilt = true;
+        });
+        break;
+      case MapBoxEvent.route_build_failed:
+        setState(() {
+          routeBuilt = false;
+        });
+        break;
+      case MapBoxEvent.navigation_running:
+        setState(() {
+          isNavigating = true;
+        });
+        break;
+      case MapBoxEvent.on_arrival:
+        if (!isMultipleStop) {
+          await Future.delayed(Duration(seconds: 3));
+          await _controller.finishNavigation();
+        } else {}
+        break;
+      case MapBoxEvent.navigation_finished:
+      case MapBoxEvent.navigation_cancelled:
+        setState(() {
+          routeBuilt = false;
+          isNavigating = false;
+        });
+        break;
+      default:
+        break;
+    }
+    setState(() {});
+  }
+}

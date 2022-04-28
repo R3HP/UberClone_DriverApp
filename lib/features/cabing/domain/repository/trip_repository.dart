@@ -4,4 +4,5 @@ abstract class TripRepository{
   Stream<List<Trip>> getTripRequestsStream();
   Future<void> selectTrip(Trip trip);
   Future<void> deleteTripRequest(Trip trip);
+  Future<void> finishTripPending(Trip trip);
 }

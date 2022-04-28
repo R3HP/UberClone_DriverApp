@@ -14,8 +14,8 @@ class GeoCodingLatLngToAddressUseCase {
     try{
       final address = await geoCodingRepository.latLngToAddress(latitude, longitude);
       return address;
-    }catch (error){
-      throw UnimplementedError();
+    }catch (error) {
+      rethrow;
     }
   }
 }

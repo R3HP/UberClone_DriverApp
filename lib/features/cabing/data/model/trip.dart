@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:taxi_line_driver/features/cabing/data/model/direction.dart';
+import 'package:taxi_line_driver/features/cabing/data/model/route_model.dart';
+import 'package:taxi_line_driver/features/cabing/data/model/way_point.dart';
 
 class Trip {
   final String? id;
@@ -98,6 +99,4 @@ class Trip {
       price.hashCode ^
       createdAt.hashCode;
   }
-
-  
 }

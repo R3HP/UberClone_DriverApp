@@ -13,7 +13,7 @@ class GetDriverFromDataBaseUseCase {
       final driver = driverRepository.getDriverFromWithDriverId(driverId);
       return driver;
     } catch (error) {
-      throw UnimplementedError();
+      rethrow;
     }
   }
 }

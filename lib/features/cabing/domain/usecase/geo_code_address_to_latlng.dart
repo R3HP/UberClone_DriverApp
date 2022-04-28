@@ -13,9 +13,8 @@ class GeoCodingAddressToLatLngUseCase {
     try{
       final latLng = await geoCodingRepostory.addressToLatLng(address);
       return latLng;
-    }catch(error){
-      print(error.toString());
-      throw UnimplementedError();
+    }catch (error) {
+      rethrow;
     }
   }
 

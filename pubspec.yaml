@@ -35,13 +35,26 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_map: ^0.14.0
-  flutter_mapbox_navigation: ^0.0.26
   flutter_riverpod: ^1.0.3
   get_it: ^7.2.0
   http: ^0.13.4
   location: ^4.3.0
   lottie: ^1.2.2
+  # mapbox_gl: ^0.10.0
+  # flutter_mapbox_navigation: ^0.0.26
+
   # mapbox_navigation: ^1.0.4
+
+  flutter_mapbox_navigation:
+    path: C:\flutter_project_ongoing\myGit\flutter_mapbox_navigation-master
+        # url: https://github.com/R3HP/flutter_mapbox_navigation.git
+        # ref: master
+  
+  # flutter_mapbox_navigation:
+  #     git:
+  #       url: https://github.com/R3HP/flutter_mapbox_navigation.git
+  #       ref: master
+  
 
 dev_dependencies:
   flutter_lints: ^1.0.0

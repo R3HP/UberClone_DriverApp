@@ -1,14 +1,20 @@
 import 'package:taxi_line_driver/features/accounting/data/model/driver_model.dart';
 import 'package:taxi_line_driver/features/accounting/domain/repository/driver_repositor.dart';
 
-class MakeDriverOnlineUseCase {
+class ToggleDriverOnlineUseCase {
   final DriverRepository driverRepository;
 
-  MakeDriverOnlineUseCase({
+  ToggleDriverOnlineUseCase({
     required this.driverRepository,
   });
 
-  Future<void>call(DriverModel driver) async {
-    return await driverRepository.makeDriverAvailableInDB(driver);
+  Future<void> call(DriverModel driver, bool shouldMakeAvailable) async {
+    try {
+      final response = await driverRepository.toggleDriverAvailablityInDB(
+          driver, shouldMakeAvailable);
+      return response;
+    } catch (error) {
+      rethrow;
+    }
   }
 }

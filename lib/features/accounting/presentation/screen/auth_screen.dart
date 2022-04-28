@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:taxi_line_driver/core/service_locator.dart';
 import 'package:taxi_line_driver/features/accounting/presentation/controller/auth_controller.dart';
+import 'package:taxi_line_driver/features/accounting/presentation/widget/auth_form_text_field.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -22,11 +22,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _carPlateController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final AuthController authController;
-  
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     authController = ref.read(authControllerProvider);
   }
@@ -86,7 +84,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                     controller: _userNameController,
                                     label: 'User Name'),
                               AuthFormTextField(
-                                  controller: _emailController, label: 'Email'),
+                                  controller: _emailController, 
+                                  label: 'Email'),
                               AuthFormTextField(
                                   controller: _passwordController,
                                   label: 'Password'),
@@ -120,9 +119,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                             _carModelController.text,
                                             _carPlateController.text);
                                       } else {
-                                        authController.loginWithEmailAndPassword(
-                                            _emailController.text,
-                                            _passwordController.text);
+                                        authController
+                                            .loginWithEmailAndPassword(
+                                                _emailController.text,
+                                                _passwordController.text);
                                       }
                                     }
                                   },
@@ -139,70 +139,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class AuthFormTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-
-  const AuthFormTextField({
-    Key? key,
-    required this.controller,
-    required this.label,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TextFormField(
-          controller: controller,
-          validator: ((value) {
-            final int treshold;
-            switch (label) {
-              case 'User Name':
-                treshold = 8;
-                break;
-              case 'Password':
-                treshold = 8;
-                break;
-              case 'Email':
-                treshold = 8;
-                break;
-              case 'Car Model':
-                treshold = 4;
-                break;
-              case 'License Plate':
-                treshold = 5;
-                break;
-              default:
-                treshold = 0;
-                break;
-            }
-            if (value!.isEmpty || value.length < treshold) {
-              return '$label must at least be $treshold characters';
-            }
-            if (label == 'Email' && !value.contains('@')) {
-              return 'Email Should Have @ In It';
-            }
-          }),
-          obscureText: true,
-          textInputAction: TextInputAction.done,
-          decoration: InputDecoration(
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              labelText: label,
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              filled: true,
-              fillColor: Colors.white),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-      ],
     );
   }
 }

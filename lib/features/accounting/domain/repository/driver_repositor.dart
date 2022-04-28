@@ -6,7 +6,7 @@ abstract class DriverRepository {
   Future<DriverModel> createUserWithEmailAndPassword(String userName,
       String email, String password, String carModel, String plateNumber);
   Future<DriverModel> getDriverFromWithDriverId(String driverId);
-  Future<void> makeDriverAvailableInDB(DriverModel driver);
+  Future<void> toggleDriverAvailablityInDB(DriverModel driver,bool shouldMakeAvailable);
   Future<void> changeDriverLocationInDB(double latitude,double longitude);
   Future<void> updateDriver(Map<String,dynamic> updateMap);
 }

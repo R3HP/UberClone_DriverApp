@@ -1,16 +1,17 @@
 import 'package:taxi_line_driver/features/cabing/data/model/trip.dart';
 import 'package:taxi_line_driver/features/cabing/domain/repository/trip_repository.dart';
 
-class GetTripRequestsUseCase {
+class FinishPendingTripUseCase {
   final TripRepository tripRepository;
-  GetTripRequestsUseCase({
+
+  FinishPendingTripUseCase({
     required this.tripRepository,
   });
 
-  Stream<List<Trip>> call() {
+  Future<void> call(Trip trip) async {
     try {
-      final stream = tripRepository.getTripRequestsStream();
-      return stream;
+      final response = await tripRepository.finishTripPending(trip);
+      return response;
     } catch (error) {
       rethrow;
     }

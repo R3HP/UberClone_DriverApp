@@ -8,12 +8,14 @@ class CreateDriverUseCase {
     required this.driverRepository,
   });
 
-  Future<DriverModel> call(String userName, String email, String password,String carModel,String plateNumber) async {
+  Future<DriverModel> call(String userName, String email, String password,
+      String carModel, String plateNumber) async {
     try {
-      return await driverRepository.createUserWithEmailAndPassword(userName, email, password, carModel, plateNumber);
-      
+      final driver = await driverRepository.createUserWithEmailAndPassword(
+          userName, email, password, carModel, plateNumber);
+      return driver;
     } catch (error) {
-      throw UnimplementedError();
+      rethrow;
     }
   }
 }
