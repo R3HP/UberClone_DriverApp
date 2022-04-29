@@ -45,14 +45,14 @@ dependencies:
 
   # mapbox_navigation: ^1.0.4
 
-  flutter_mapbox_navigation:
-    path: C:\flutter_project_ongoing\myGit\flutter_mapbox_navigation-master
+  # flutter_mapbox_navigation:
+  #   path: C:\flutter_project_ongoing\myGit\flutter_mapbox_navigation-master
         # url: https://github.com/R3HP/flutter_mapbox_navigation.git
         # ref: master
   
-  # flutter_mapbox_navigation:
-  #     git:
-  #       url: https://github.com/R3HP/flutter_mapbox_navigation.git
+  flutter_mapbox_navigation:
+      git:
+        url: https://github.com/R3HP/flutter_mapbox_navigation.git
   #       ref: master
   
 

@@ -163,9 +163,11 @@ packages:
   flutter_mapbox_navigation:
     dependency: "direct main"
     description:
-      path: "C:\\flutter_project_ongoing\\myGit\\flutter_mapbox_navigation-master"
-      relative: false
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: a60d124cd410e02092f516a1b6240e3306ad8df4
+      url: "https://github.com/R3HP/flutter_mapbox_navigation.git"
+    source: git
     version: "0.1.0"
   flutter_riverpod:
     dependency: "direct main"
